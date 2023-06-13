@@ -40,4 +40,3 @@ class AuthRepository:
         filter = {"_id" : ObjectId(user_id)}
         update = {"$set" : {"phone" : user["phone"], "name" : user["name"], "city" : user["city"]}}
         user = self.database["users"].update_one(filter, update)
-        return user

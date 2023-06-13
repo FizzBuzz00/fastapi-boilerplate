@@ -1,4 +1,4 @@
-from fastapi import Depends, status
+from fastapi import Depends, Response, status
 from . import router
 from ..adapters.jwt_service import JWTData
 from .dependencies import parse_jwt_user_data
@@ -20,6 +20,6 @@ def update_user_info_method(
     input: UpdateUserInfoRequest,
     jwt_data: JWTData = Depends(parse_jwt_user_data),
     svc: Service = Depends(get_service),
-) -> status.HTTP_200_OK:
+) -> dict[str, str]:
     svc.repository.update_user_info(jwt_data.user_id, input.dict())
-    return UpdateUserInfoResponse(name=input.name)
+    return Response(status_code=status.HTTP_200_OK)
