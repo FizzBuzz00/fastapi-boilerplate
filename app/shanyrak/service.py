@@ -1,6 +1,6 @@
 
 from app.config import database
-from app.shanyrak.adapters.s3_service import S3Service
+from .adapters.s3_service import S3Service
 
 from .repository.repository import ShanyrakRepository
 
