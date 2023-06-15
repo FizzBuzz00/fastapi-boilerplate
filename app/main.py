@@ -3,6 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.auth.router import router as auth_router
 from app.shanyrak.router import router as shanyraq_router
+from app.comment.router import router as comment_router
 from app.config import client, env, fastapi_config
 
 
@@ -24,3 +25,4 @@ app.add_middleware(
 
 app.include_router(shanyraq_router, prefix="", tags=["shanyraq"])   
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
+app.include_router(comment_router, prefix="", tags=["Comment"])

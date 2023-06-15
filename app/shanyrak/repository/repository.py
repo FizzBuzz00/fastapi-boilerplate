@@ -1,6 +1,5 @@
 from typing import Any, Optional
 from bson import ObjectId
-from fastapi import Depends
 from pymongo.database import Database
 
 class ShanyrakRepository:
@@ -19,3 +18,13 @@ class ShanyrakRepository:
     def delete_shanyrak(self, id : str, jwt_id : str):
         filter = {"_id" : ObjectId(id), "user_id": ObjectId(jwt_id)}
         self.database["shanyraq"].delete_one(filter)
+    def add_image_shanyrak(self, house_id : str, media : list):
+        filter = {"_id" : ObjectId(house_id)}
+        update = {"$set" : {"media" : media}}
+        self.database["shanyraq"].update_one(filter, update)
+    def delete_media(self, house_id:str):
+        filter = {"_id":ObjectId(house_id)}
+        update = {"$unset":{"media": 1}}
+        self.database["shanyraq"].update_one(filter, update)
+    def show_option(self, house_id:str) -> dict[str, list]:
+        return self.database["shanyraq"].find_one({"_id": ObjectId(house_id)}, {"_id": 0, "media":1})

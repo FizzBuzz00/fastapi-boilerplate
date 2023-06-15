@@ -19,6 +19,7 @@ class GetPostResponse(AppModel):
     rooms_count : int
     description : str
     user_id: Any
+    media : list
 
 @router.get("/shanyraks/{id:str}", response_model=GetPostResponse)
 def get_shanyrak(
