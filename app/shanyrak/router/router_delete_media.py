@@ -4,7 +4,7 @@ from ..service import Service, get_service
 from . import router
 
 
-
+ 
 @router.delete("/shanyraks/{id:str}/media")
 def delete_media(
     house_id:str,
