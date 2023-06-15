@@ -8,6 +8,8 @@ services:
     branch: main
     envVars:
       - key: MONGO_URL
+      - key: AWS_ACCESS_KEY_ID
+      - key: AWS_SECRET_ACCESS_KEY
         sync: false
     buildFilter:
       paths:
