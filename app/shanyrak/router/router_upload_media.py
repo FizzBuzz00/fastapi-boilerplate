@@ -8,7 +8,6 @@ def updload_file_id(
     file : list[UploadFile],
     svc : Service = Depends(get_service)
 ):
-    # file is array = 
     arrstr = []
     for f in file:
         arrstr.append(svc.s3_service.upload_file(f.file, f.filename))

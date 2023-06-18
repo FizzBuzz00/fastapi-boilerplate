@@ -18,7 +18,6 @@ class CreatePostRequest(AppModel):
     rooms_count : int
     description : str
 
-
 class CreatePostResponse(AppModel):
     id : Any = Field(alias="_id")
 
@@ -28,5 +27,8 @@ def create_shanyrak(
     jwt_data: JWTData = Depends(parse_jwt_user_data),
     svc: Service = Depends(get_service),
 ) -> dict[str, str]:
+    coord = svc.here_service.get_coordinates(input.address)
+    json = {"location" : coord}
     shan_id = svc.repository.create_post_shanyraq(jwt_data.user_id, input.dict())
+    svc.repository.update_shanyrak(shan_id, json, jwt_data.user_id)
     return CreatePostResponse(id=shan_id)
