@@ -1,5 +1,6 @@
 from typing import Any, Optional
 from bson import ObjectId
+from fastapi import HTTPException
 from pymongo.database import Database
 
 class ShanyrakRepository:
@@ -45,3 +46,25 @@ class ShanyrakRepository:
     
     def return_ava(self, user_id):
         return self.database["users"].find_one({"_id": ObjectId(user_id)}, {"avatar_url" : 1})
+
+    def pagination(self, limit : int, offset : int, type:str, rooms_count:int, price_from:int, price_until:int):
+        query = {}
+        if type is not None:
+            query["type"] = type
+        if rooms_count is not None:
+            query["rooms_count"] = rooms_count
+        if price_from is not None and price_until is not None:
+            query["price"] = {
+            "$gt": price_from,
+            "$lt": price_until
+        }
+
+        collection_count = self.database["shanyraq"].count_documents(query)
+        res = self.database["shanyraq"].find(query).limit(limit).skip(offset).sort([("price", 1)])
+        arr = []
+        for r in res:
+            arr.append(r)
+        return {
+            "total":collection_count,
+            "objects":arr   
+        }
