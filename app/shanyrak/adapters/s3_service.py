@@ -3,8 +3,10 @@ from typing import BinaryIO
 import boto3
 
 class S3Service:
-    def __init__(self):
+    def __init__(self, acces_key, secret_key):
         self.s3 = boto3.client("s3")
+        self.access_key = acces_key
+        self.secret_key = secret_key
 
     def upload_file(self, file: BinaryIO, filename: str):
         bucket = "mamushevarup-bucket"
