@@ -8,6 +8,7 @@ from . import router
 
 class RegisterUserRequest(AppModel):
     email: str
+    role:str
     password: str
 
 
@@ -29,5 +30,5 @@ def register_user(
         )
 
     svc.repository.create_user(input.dict())
-
+    
     return RegisterUserResponse(email=input.email)

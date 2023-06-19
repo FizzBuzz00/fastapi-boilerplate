@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 class JWTData(BaseModel):
     user_id: str = Field(alias="sub")
+    role:str
 
 
 class JwtService:
@@ -28,9 +29,9 @@ class JwtService:
 
         jwt_data = {
             "sub": str(user["_id"]),
+            "role":str(user["role"]),
             "exp": datetime.utcnow() + expires_delta,
         }
-
         return jwt.encode(jwt_data, self.secret, algorithm=self.algorithm)
 
     def parse_jwt_user_data(self, token: str) -> Optional[JWTData]:

@@ -28,5 +28,5 @@ def get_shanyrak(
     jwt_data: JWTData = Depends(parse_jwt_user_data),
     svc: Service = Depends(get_service),
 ) -> dict[str, str]:
-    model = svc.repository.get_shanyrak_by_id(shanyrak_id)
+    model = svc.repository.get_shanyrak_by_id(shanyrak_id, "shanyraq")
     return GetPostResponse(**model)

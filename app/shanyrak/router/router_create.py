@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import Field
 from typing import Any
 from fastapi import Depends
@@ -29,6 +30,5 @@ def create_shanyrak(
 ) -> dict[str, str]:
     coord = svc.here_service.get_coordinates(input.address)
     json = {"location" : coord}
-    shan_id = svc.repository.create_post_shanyraq(jwt_data.user_id, input.dict())
-    svc.repository.update_shanyrak(shan_id, json, jwt_data.user_id)
+    shan_id = svc.repository.create_post_shanyraq(jwt_data.user_id, input.dict() | json | {"created_at" : datetime.utcnow()}, "waitlist")
     return CreatePostResponse(id=shan_id)

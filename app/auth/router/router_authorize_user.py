@@ -26,7 +26,6 @@ def authorize_user(
 
     if not check_password(input.password, user["password"]):
         raise InvalidCredentialsException
-
     return AuthorizeUserResponse(
         access_token=svc.jwt_svc.create_access_token(user=user),
     )

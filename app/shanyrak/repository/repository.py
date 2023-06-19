@@ -6,22 +6,22 @@ from pymongo.database import Database
 class ShanyrakRepository:
     def __init__(self, database: Database):
         self.database = database
-    def create_post_shanyraq(self, user_id: str,shan: dict[str, Any]) -> Optional[dict[str, Any]]:
+    def create_post_shanyraq(self, user_id: str,shan: dict[str, Any], collection_name:str) -> Optional[dict[str, Any]]:
         shan["user_id"] = ObjectId(user_id)
-        sh = self.database["shanyraq"].insert_one(shan)
+        sh = self.database[collection_name].insert_one(shan)
         return sh.inserted_id
     
-    def get_shanyrak_by_id(self,  id : str) -> dict[str, Any]:
-        return self.database["shanyraq"].find_one({"_id": ObjectId(id)})
+    def get_shanyrak_by_id(self,  id : str, collection_name:str) -> dict[str, Any]:
+        return self.database[collection_name].find_one({"_id": ObjectId(id)})
     
     def update_shanyrak(self, id : str, inp : dict, jwt_id: str):
         filter = {"_id" : ObjectId(id), "user_id" : ObjectId(jwt_id)}
         update = {"$set" : inp}
         self.database["shanyraq"].update_one(filter, update)
 
-    def delete_shanyrak(self, id : str, jwt_id : str):
+    def delete_shanyrak(self, id : str, jwt_id : str, collection_name:str):
         filter = {"_id" : ObjectId(id), "user_id": ObjectId(jwt_id)}
-        self.database["shanyraq"].delete_one(filter)
+        self.database[collection_name].delete_one(filter)
 
     def add_image_shanyrak(self, house_id : str, media : list):
         filter = {"_id" : ObjectId(house_id)}
@@ -60,7 +60,7 @@ class ShanyrakRepository:
         }
 
         collection_count = self.database["shanyraq"].count_documents(query)
-        res = self.database["shanyraq"].find(query).limit(limit).skip(offset).sort([("price", 1)])
+        res = self.database["shanyraq"].find(query).limit(limit).skip(offset).sort([("created_at", 1)])
         arr = []
         for r in res:
             arr.append(r)
@@ -68,3 +68,16 @@ class ShanyrakRepository:
             "total":collection_count,
             "objects":arr   
         }
+    
+    def review_houses(self,limit:int, offset:int):
+        collection_count = self.database["waitlist"].count_documents({})
+        res = self.database["waitlist"].find({}).limit(limit).skip(offset).sort([("created_at", 1)])
+        arr = []
+        for r in res:
+            arr.append(r)
+        return {
+            "total":collection_count,
+            "objects":arr   
+        }
+    def delete_for_moderators(self, house_id):
+        self.database["waitlist"].delete_one({"_id":ObjectId(house_id)})
